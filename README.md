@@ -7,8 +7,8 @@ This project is purely built by using Torch 7.
 
 ## Updates
 
-+ Load pretrained VGG-16 network or TeraDeep Network [TODO]
-+ Print VGG-16 model, filters, and input, output stream [TODO]
++ Load pretrained VGG-16 network or TeraDeep Network [2016-02-09]
++ Print VGG-16 model, filters, and input, output stream [2016-02-09]
 + Tackle matlab code for transfering ConvNet to SNNs [TODO]
 
 ## Notes
