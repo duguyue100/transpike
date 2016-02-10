@@ -10,6 +10,9 @@ This project is purely built by using Torch 7.
 + Load pretrained VGG-16 network or TeraDeep Network [2016-02-09]
 + Print VGG-16 model, filters, and input, output stream [2016-02-09]
 + Write a pre-mature version of Spiking ReLU class [2016-02-10]
++ Setup experiments with single image to get reasonable results [TODO]
++ Setup experiments with multiple images to get reasonable results [TODO]
++ Figure out a way of hooking this modified network with a camera [TODO]
 + Setup experiments as indicated in Python code [TODO]
 
 ## Notes
