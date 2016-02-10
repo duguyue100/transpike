@@ -25,7 +25,6 @@ l=image.scale(l, 224, 224);
 network.model:forward(l:float());
 
 fms=network.model.modules[3].output; -- call the layer output you want.
-print (fms:size())
 --image.display(image.toDisplayTensor{input=fms, padding=1, nrow=12, scaleeach=true});
 
 --network.model:insert(nn.ReLU(), 23);

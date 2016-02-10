@@ -13,11 +13,16 @@ local SpikeConvReLU, Parent = torch.class('nn.SpikeConvReLU', 'nn.Module')
 -- 
 -- refractory : float
 -- 
-function SpikeConvReLU:__init(pre_size, threshold, refractory)
+-- timestep : float
+--    internal time step, however entire structure shares same clock.
+-- 
+function SpikeConvReLU:__init(pre_size, threshold, refractory, timestep)
   Parent.__init(self);
   self.pre_size=pre_size;
   self.threshold=threshold or 1.0;
   self.refractory=refractory or 1.0;
+  self.timestep=timestep;
+  self.time=timestep;
   
   self.mem=torch.zeros(self.pre_size);
   self.refrac_until=torch.zeros(self.pre_size);
@@ -51,9 +56,20 @@ end
 --    the input tensor for next layer (also as the output spikes)
 function SpikeConvReLU:updateOutput(input)
   self.output=input;
+
+  -- logistics of computing spikes
+    
+--  impulse=input;
+--  masked_imp=torch.cmul(impulse, self.refrac_until:le(self.time):double(););
+--  new_mem=torch.add(self.mem, masked_imp);
+--  output_spikes=new_mem:ge(self.threshold):double();
+--  new_and_reset_mem=torch.cmul(new_mem, output_spikes:gt(0)); -- needs more thinking
+--  new_refractory=torch.cmul()            torch.Tensor(); -- needs more thinking here
+--  
+--  self.refrac_until=new_refractory;
+--  self.mem=new_and_reset_mem;
   
-  impulse=input;
-  
+  self.time=self.time+self.timestep;
   
   return self.output;
 end
