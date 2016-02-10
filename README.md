@@ -9,7 +9,8 @@ This project is purely built by using Torch 7.
 
 + Load pretrained VGG-16 network or TeraDeep Network [2016-02-09]
 + Print VGG-16 model, filters, and input, output stream [2016-02-09]
-+ Tackle matlab code for transfering ConvNet to SNNs [TODO]
++ Write a pre-mature version of Spiking ReLU class [2016-02-10]
++ Setup experiments as indicated in Python code [TODO]
 
 ## Notes
 
@@ -46,6 +47,19 @@ This project is purely built by using Torch 7.
   (23): nn.SoftMax
 }
    ```
+
++ On writing `SpikeReLU` class
+
+   + I'm basically trying to replicate Dianel's sensor fusion work from [here](https://github.com/dannyneil/sensor_fusion_iscas_2016) right now.
+   + From the original code, Danny implemented spiking layer for dense layer, convolution layer and polling layer. It's constrained by the model and the software he chose.
+   + Instead of re-implementing these layers in Torch entirely, I figured I can write a general spiking ReLU class and replace the original ReLU functions
+   + But, there are few problems, the first is on the time sync. In Theano, the time tensor can be traveled through computation graph. However, this is not in the case of Torch, so I defined a internal clock to every `SpikeReLU` object and update them at the same time.
+   + Second is about polling method, previous papers told me using Max-Polling is rather difficult to implement (or messy). But here I haven't met the tricky part yet.
+   + The testing part is rather tricky, I would like to give a single image first and see if there is reasonable output. Hook this architecture with camera is rather a later work.  
+   + Right now, each `SpikeReLU` object is initialized with manual setup. There should be a way to dress up the network without this kind of intervention.
+   + For the bigger picture, not all ConvNets are for Object recognition, and not all ConvNets are only having simple convolution and polling method. Dealing with that should be interesting.
+   + This technique doesn't really reduce the amount of data and space used. I would be interested to see how this can be a real energy saving plan (notice all data flow is still in float numbers) 
+   + Setting this modified network up with a huge dataset like ImageNet should be interesting.
 
 ## Contacts
 
