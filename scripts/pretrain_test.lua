@@ -20,6 +20,8 @@ network.stat=torch.load('../data/stat.t7');
 filters=network.model.modules[1].weight; -- call the weights you want
 filters=torch.reshape(filters, torch.LongStorage{96,3,9,9});
 
+print (network.model.modules[1].bias);
+
 out=image.toDisplayTensor{input=filters, padding=1, nrow=12, scaleeach=true};
 image.save("../data/first-layer-filters.png", out);
 
