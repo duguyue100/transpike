@@ -18,14 +18,34 @@ network.model=torch.load('../data/model.net');
 network.stat=torch.load('../data/stat.t7');
 network.model:evaluate();
 
+-- remove ReLU and plug SpikeConvReLU
+network.model:remove(2);
 network.model:insert(nn.SpikeConvReLU(torch.LongStorage{96, 56, 56}), 2);
+network.model:remove(5);
+network.model:insert(nn.SpikeConvReLU(torch.LongStorage{256, 26, 26}), 5);
+network.model:remove(8);
+network.model:insert(nn.SpikeConvReLU(torch.LongStorage{384, 12, 12}), 8);
+network.model:remove(11);
+network.model:insert(nn.SpikeConvReLU(torch.LongStorage{384, 5, 5}), 11);
+network.model:remove(13);
+network.model:insert(nn.SpikeConvReLU(torch.LongStorage{256, 3, 3}), 13);
+network.model:remove(17);
+network.model:insert(nn.SpikeConvReLU(torch.LongStorage{4096}), 17);
+network.model:remove(20);
+network.model:insert(nn.SpikeConvReLU(torch.LongStorage{4096}), 20);
+
+torch.save("../data/model_spike.net", network.model);
+print ("save completed");
 
 l=image.lena();
 l=image.scale(l, 224, 224);
 network.model:forward(l:float());
 
-fms=network.model.modules[3].output; -- call the layer output you want.
---image.display(image.toDisplayTensor{input=fms, padding=1, nrow=12, scaleeach=true});
+print (network.model.modules[17].output:size())
+
+
+fms=network.model.modules[11].output; -- call the layer output you want.
+--image.display(image.toDisplayTensor{input=fms, padding=1, nrow=16, scaleeach=true});
 
 --network.model:insert(nn.ReLU(), 23);
 --network.model:insert(nn.Dropout(0.500000), 24);
