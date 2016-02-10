@@ -1,6 +1,6 @@
 require 'nn'
 
-local SpikeConvReLU, Parent = torch.class('nn.SpikeConvReLU', 'nn.Module')
+local SpikeDenseReLU, Parent = torch.class('nn.SpikeDenseReLU', 'nn.Module')
 
 --- The init function set basic status of the layer
 -- 
@@ -16,7 +16,7 @@ local SpikeConvReLU, Parent = torch.class('nn.SpikeConvReLU', 'nn.Module')
 -- timestep : float
 --    internal time step, however entire structure shares same clock.
 -- 
-function SpikeConvReLU:__init(pre_size, timestep, threshold, refractory)
+function SpikeDenseReLU:__init(pre_size, timestep, threshold, refractory)
   Parent.__init(self);
   self.pre_size=pre_size;
   self.threshold=threshold or 1.0;
@@ -33,7 +33,7 @@ end
 -- recursive reset, find here:
 -- https://github.com/dannyneil/sensor_fusion_iscas_2016/blob/master/theano_layers.py#L121
 -- https://github.com/dannyneil/sensor_fusion_iscas_2016/blob/master/spike_tester_theano.py#L13
-function SpikeConvReLU:reset()
+function SpikeDenseReLU:reset()
   self.mem:zero():float();
   self.refrac_until:zero():float();
 end
@@ -49,7 +49,7 @@ end
 -- -------
 -- self.output : torch.Tensor
 --    the input tensor for next layer (also as the output spikes)
-function SpikeConvReLU:updateOutput(input)
+function SpikeDenseReLU:updateOutput(input)
   self.output=input;
 
   -- Destroy impulse if in refrac
@@ -84,37 +84,38 @@ end
 
 --- Since it's only transferring from ReLU out to spikes
 -- therefore gradInput is not changed as gradOutput
-function SpikeConvReLU:updateGradInput(input, gradOutput)
+function SpikeDenseReLU:updateGradInput(input, gradOutput)
   self.gradInput=gradOutput;
   return self.gradInput;
 end
+
 
 ------- Setting and Clearing functions ------
 
 --- Set output size of previous layer.
 -- doc found at init function
-function SpikeConvReLU:setPreSize(pre_size)
+function SpikeDenseReLU:setPreSize(pre_size)
   self.pre_size=pre_size;
 end
 
 --- Set threshold variable
 -- doc found at init function
-function SpikeConvReLU:setThreshold(threshold)
+function SpikeDenseReLU:setThreshold(threshold)
   self.threshold=threshold;
 end
 
 --- Set refractory variable
 -- doc found at init function
-function SpikeConvReLU:setRefractory(refractory)
+function SpikeDenseReLU:setRefractory(refractory)
   self.refractory=refractory;
 end
 
 --- Set timestep variable
 -- doc found at init function
-function SpikeConvReLU:setTimeStep(timestep)
+function SpikeDenseReLU:setTimeStep(timestep)
   self.timestep=timestep
 end
 
-function SpikeConvReLU:clearState()
+function SpikeDenseReLU:clearState()
   return Parent.clearState(self);
 end
