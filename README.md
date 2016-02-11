@@ -215,6 +215,12 @@ toy
 -------------------------
 ```
 
+The result does not seem reasonable enough, especially there is a female inside the picture, but it's still partially making sense.
+Furthermore, since the output from last `SpikeReLU` layer is only spikes, so there is no probability distribution as provided by softmax function.
+So I couldn't rank top guesses. So in this case, I printed all possible labels that are indicated by output vector.
+
+And the output labels seems not changing over time, I don't know if it's caused by this still image setting (maybe should introduce some random shifts). 
+
 ## Contacts
 
 Hu Yuhuang  
