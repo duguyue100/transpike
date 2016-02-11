@@ -92,38 +92,40 @@ spike_snapshot=torch.randn(3,224,224)*rescale_fac;
 
 l=spike_snapshot:le(l):float();
 
-for k=1, num_batches do
-  
-  --- cleaning SpikeReLU
-  
-  network.model.modules[2]:reset()
-  network.model.modules[5]:reset()
-  network.model.modules[8]:reset()
-  network.model.modules[11]:reset()
-  network.model.modules[13]:reset()
-  network.model.modules[17]:reset()
-  network.model.modules[20]:reset()
-  network.model.modules[23]:reset()
-   
-  for i=1,20 do  
-    network.model:forward(l:float());
-    image_title=string.format("../data/exp_2/spike-conv-layer-5-out-%i-%i.png", k, i);
-    print (image_title)
-    fms=network.model.modules[5].output; -- call the layer output you want.
-    image.save(image_title, image.toDisplayTensor{input=fms, padding=1, nrow=16, scaleeach=true});
-  end
-  
-  out=network.model.modules[23].output;
-  all_labels=findall(out);
-  print ("-------------------------", k)
-  print ("Internal time clock: ", network.model.modules[2].time, "s")
-  for i=1, 1000 do
-    if all_labels[i]~=0 then
-      print (network.label[all_labels[i]+1][1]);
-    end
-  end
-  print ("-------------------------")
-end
+image.save("../data/lena-after-spike-snapshot.png", l);
+
+--for k=1, num_batches do
+--  
+--  --- cleaning SpikeReLU
+--  
+--  network.model.modules[2]:reset()
+--  network.model.modules[5]:reset()
+--  network.model.modules[8]:reset()
+--  network.model.modules[11]:reset()
+--  network.model.modules[13]:reset()
+--  network.model.modules[17]:reset()
+--  network.model.modules[20]:reset()
+--  network.model.modules[23]:reset()
+--   
+--  for i=1,20 do  
+--    network.model:forward(l:float());
+--    image_title=string.format("../data/exp_2/spike-conv-layer-5-out-%i-%i.png", k, i);
+--    print (image_title)
+--    fms=network.model.modules[5].output; -- call the layer output you want.
+--    image.save(image_title, image.toDisplayTensor{input=fms, padding=1, nrow=16, scaleeach=true});
+--  end
+--  
+--  out=network.model.modules[23].output;
+--  all_labels=findall(out);
+--  print ("-------------------------", k)
+--  print ("Internal time clock: ", network.model.modules[2].time, "s")
+--  for i=1, 1000 do
+--    if all_labels[i]~=0 then
+--      print (network.label[all_labels[i]+1][1]);
+--    end
+--  end
+--  print ("-------------------------")
+--end
 
 --out=network.model.modules[23].output;
 --

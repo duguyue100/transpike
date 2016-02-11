@@ -114,6 +114,8 @@ nn.Sequential {
 
 Features maps of second ConvLayer after polling. Each feature map has a size of 26x26, and in total 256 feature maps. The input image is the standard Lena image resized to 224x224. Following table prints feature maps in 20 time steps (the configuration follows Danny's code from [here](https://github.com/dannyneil/sensor_fusion_iscas_2016/blob/master/test_convnet.py#L36-L41):
 
+**These pictures are generated with original Lena image without taking spike snapshot**
+
 |                                             |                                             |                                             |
 |:-------------------------------------------:|:-------------------------------------------:|:-------------------------------------------:|
 |1                                            |2                                            |3                                            |
