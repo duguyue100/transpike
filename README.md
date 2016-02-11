@@ -66,8 +66,8 @@ This project is purely built by using Torch 7.
    
 + On methodology and general concerns
 
-   + Danny's code put ReLU after every convolution layers and polling layer. However the typical way of doing so is somehow glue convolution layer and polling layer as one, and it behaves exactly the same. So in this sense, polling should be as a subroutine to provide output of a layer instead of a particular spiking layer.
-
+   + Danny's code goes `ConvLayer-->ReLU-->Polling Layer` in this design. However, the typical design is `ConvLayer-->Polling Layer-->ReLU`. They are doing the same job in conventional ConvNets. Following the later one could result simpler implementation (which in this repo), polling layer is just one subroutine of getting output from a convolution layer.
+   
 ## Contacts
 
 Hu Yuhuang  
