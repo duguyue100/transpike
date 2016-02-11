@@ -46,21 +46,15 @@ l=image.scale(l, 224, 224);
 
 for i=1,20 do
   network.model:forward(l:float());
+  image_title=string.format("../data/spike-conv-layer-5-out-%i.png", i);
+  print (image_title)
+  fms=network.model.modules[5].output; -- call the layer output you want.
+  image.save(image_title, image.toDisplayTensor{input=fms, padding=1, nrow=16, scaleeach=true});
 end
 
-fms=network.model.modules[5].output; -- call the layer output you want.
-image.display(image.toDisplayTensor{input=fms, padding=1, nrow=16, scaleeach=true});
-
---network.model:insert(nn.ReLU(), 23);
---network.model:insert(nn.Dropout(0.500000), 24);
---network.model:insert(nn.Linear(1000, 1000), 25);
+--fms=network.model.modules[5].output; -- call the layer output you want.
+--image.display(image.toDisplayTensor{input=fms, padding=1, nrow=16, scaleeach=true});
 
 --[[ Print model ]]
 
 print (network.model);
---maxs, indices = torch.max(network.model.modules[23].output)
---
---print (maxs);
---print (indices);
-
---print (network.model.modules[23].output);
