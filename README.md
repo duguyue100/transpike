@@ -17,7 +17,7 @@ This project is purely built by using Torch 7.
 
 ## Notes
 
-+ Network Structure of TeraDeep's 1000 Categories Net
+### Network Structure of TeraDeep's 1000 Categories Net
 
    Designed architecture should receive 224x224 input, however, the architecture can still receive images from 221x221 to 252x252.
    The height and width doesn't have to be same in this range.
@@ -51,19 +51,49 @@ This project is purely built by using Torch 7.
 }
    ```
 
-+ On visualization of TeraDeep 1000 Categories Net
+### On visualization of TeraDeep 1000 Categories Net
 
    Here we visualize the first layer filters (96 9x9 filters) and feature maps from first convolution layer
    
-   Filters from first layer:
+   |                                               |
+   |:---------------------------------------------:|
+   |Filters from first layer                       |
+   |![filters](/data/first-layer-filters.png)      |
+   |Feature maps from first convolution layer      |
+   |![fms](/data/first-layer-feature-maps-lena.png)|
    
-   ![filters](/data/first-layer-filters.png)
+### Network structure after modifying TeraDeep 1000 Categories Net
 
-   Feature maps from first convolution layer:
+```
+nn.Sequential {
+  [input -> (1) -> (2) -> (3) -> (4) -> (5) -> (6) -> (7) -> (8) -> (9) -> (10) -> (11) -> (12) -> (13) -> (14) -> (15) -> (16) -> (17) -> (18) -> (19) -> (20) -> (21) -> (22) -> (23) -> output]
+  (1): nn.SpatialConvolutionMM(3 -> 96, 9x9, 4,4, 4,4)
+  (2): nn.SpikeReLU
+  (3): nn.SpatialConvolutionMM(96 -> 256, 5x5)
+  (4): nn.SpatialMaxPooling(2,2,2,2)
+  (5): nn.SpikeReLU
+  (6): nn.SpatialConvolutionMM(256 -> 384, 3x3)
+  (7): nn.SpatialMaxPooling(2,2,2,2)
+  (8): nn.SpikeReLU
+  (9): nn.SpatialConvolutionMM(384 -> 384, 3x3)
+  (10): nn.SpatialMaxPooling(2,2,2,2)
+  (11): nn.SpikeReLU
+  (12): nn.SpatialConvolutionMM(384 -> 256, 3x3)
+  (13): nn.SpikeReLU
+  (14): nn.View
+  (15): nn.Dropout(0.500000)
+  (16): nn.Linear(2304 -> 4096)
+  (17): nn.SpikeReLU
+  (18): nn.Dropout(0.500000)
+  (19): nn.Linear(4096 -> 4096)
+  (20): nn.SpikeReLU
+  (21): nn.Dropout(0.500000)
+  (22): nn.Linear(4096 -> 1000)
+  (23): nn.SpikeReLU
+}
+```
    
-   ![fms](/data/first-layer-feature-maps-lena.png)
-   
-+ On writing `SpikeReLU` class
+### On writing `SpikeReLU` class
 
    + I'm basically trying to replicate Dianel's sensor fusion work from [here](https://github.com/dannyneil/sensor_fusion_iscas_2016) right now.
    + From the original code, Danny implemented spiking layer for dense layer, convolution layer and polling layer. It's constrained by the model and the software he chose.
@@ -76,11 +106,11 @@ This project is purely built by using Torch 7.
    + This technique doesn't really reduce the amount of data and space used. I would be interested to see how this can be a real energy saving plan (notice all data flow is still in float numbers) 
    + Setting this modified network up with a huge dataset like ImageNet should be interesting.
    
-+ On methodology and general concerns
+### On methodology and general concerns
 
    + Danny's code goes `ConvLayer-->ReLU-->Polling Layer` in this design. However, the typical design is `ConvLayer-->Polling Layer-->ReLU`. They are doing the same job in conventional ConvNets. Following the later one could result simpler implementation (which in this repo), polling layer is just one subroutine of getting output from a convolution layer.
    
-+ Features maps of second ConvLayer after polling. Each feature map has a size of 26x26, and in total 256 feature maps. The input image is the standard Lena image resized to 224x224. Following table prints feature maps in 20 time steps (the configuration follows Danny's code from [here](https://github.com/dannyneil/sensor_fusion_iscas_2016/blob/master/test_convnet.py#L36-L41):
+### Features maps of second ConvLayer after polling. Each feature map has a size of 26x26, and in total 256 feature maps. The input image is the standard Lena image resized to 224x224. Following table prints feature maps in 20 time steps (the configuration follows Danny's code from [here](https://github.com/dannyneil/sensor_fusion_iscas_2016/blob/master/test_convnet.py#L36-L41):
 
    |                                             |                                             |                                             |
    |:-------------------------------------------:|:-------------------------------------------:|:-------------------------------------------:|
