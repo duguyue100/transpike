@@ -12,6 +12,7 @@ This project is purely built by using Torch 7.
 + Write a pre-mature version of Spiking ReLU class [2016-02-10]
 + Setup experiments with single image to get reasonable results [TODO]
 + Setup experiments with multiple images to get reasonable results [TODO]
++ Find a way of setting up a proper classification experiment [TODO]
 + Figure out a way of hooking this modified network with a camera [TODO]
 + Setup experiments as indicated in Python code [TODO]
 
