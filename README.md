@@ -151,29 +151,29 @@ While I ran the experiments, I checked two things:
 I took 20 rounds on the same image, and for each round, there are 20 steps like previous setup. All parameters are followed. Here I showed feature maps of second ConvLayer after polling from first and second round.
 Although the time is flying, feature maps of same time step in different rounds seem having no difference.
 
-|   |                                               |                                               |                                               |
-|:-:|:---------------------------------------------:|:---------------------------------------------:|:---------------------------------------------:|
-|   |1                                              |2                                              |3                                              |
-|1st|![ts 1](/data/spike-conv-layer-5-out-1-1.png)  |![ts 2](/data/spike-conv-layer-5-out-1-2.png)  |![ts 3](/data/spike-conv-layer-5-out-1-3.png)  |
-|2nd|![ts 1](/data/spike-conv-layer-5-out-2-1.png)  |![ts 2](/data/spike-conv-layer-5-out-2-2.png)  |![ts 3](/data/spike-conv-layer-5-out-2-3.png)  |
-|   |4                                              |5                                              |6                                              |
-|1st|![ts 4](/data/spike-conv-layer-5-out-1-4.png)  |![ts 5](/data/spike-conv-layer-5-out-1-5.png)  |![ts 6](/data/spike-conv-layer-5-out-1-6.png)  |
-|2nd|![ts 4](/data/spike-conv-layer-5-out-2-4.png)  |![ts 5](/data/spike-conv-layer-5-out-2-5.png)  |![ts 6](/data/spike-conv-layer-5-out-2-6.png)  |
-|   |7                                              |8                                              |9                                              |
-|1st|![ts 7](/data/spike-conv-layer-5-out-1-7.png)  |![ts 8](/data/spike-conv-layer-5-out-1-8.png)  |![ts 9](/data/spike-conv-layer-5-out-1-9.png)  |
-|2nd|![ts 7](/data/spike-conv-layer-5-out-2-7.png)  |![ts 8](/data/spike-conv-layer-5-out-2-8.png)  |![ts 9](/data/spike-conv-layer-5-out-2-9.png)  |
-|   |10                                             |11                                             |12                                             |
-|1st|![ts 10](/data/spike-conv-layer-5-out-1-10.png)|![ts 11](/data/spike-conv-layer-5-out-1-11.png)|![ts 12](/data/spike-conv-layer-5-out-1-12.png)|
-|2nd|![ts 10](/data/spike-conv-layer-5-out-2-10.png)|![ts 11](/data/spike-conv-layer-5-out-2-11.png)|![ts 12](/data/spike-conv-layer-5-out-2-12.png)|
-|   |13                                             |14                                             |15                                             |
-|1st|![ts 13](/data/spike-conv-layer-5-out-1-13.png)|![ts 14](/data/spike-conv-layer-5-out-1-14.png)|![ts 15](/data/spike-conv-layer-5-out-1-15.png)|
-|2nd|![ts 13](/data/spike-conv-layer-5-out-2-13.png)|![ts 14](/data/spike-conv-layer-5-out-2-14.png)|![ts 15](/data/spike-conv-layer-5-out-2-15.png)|
-|   |16                                             |17                                             |18                                             |
-|1st|![ts 16](/data/spike-conv-layer-5-out-1-16.png)|![ts 17](/data/spike-conv-layer-5-out-1-17.png)|![ts 18](/data/spike-conv-layer-5-out-1-18.png)|
-|2nd|![ts 16](/data/spike-conv-layer-5-out-2-16.png)|![ts 17](/data/spike-conv-layer-5-out-2-17.png)|![ts 18](/data/spike-conv-layer-5-out-2-18.png)|
-|   |19                                             |20                                             |                                               |
-|1st|![ts 19](/data/spike-conv-layer-5-out-1-19.png)|![ts 20](/data/spike-conv-layer-5-out-1-20.png)|                                               |
-|2nd|![ts 19](/data/spike-conv-layer-5-out-2-19.png)|![ts 20](/data/spike-conv-layer-5-out-2-20.png)|                                               |
+|   |                                                     |                                                     |                                                     |
+|:-:|:---------------------------------------------------:|:---------------------------------------------------:|:---------------------------------------------------:|
+|   |1                                                    |2                                                    |3                                                    |
+|1st|![ts 1](/data/exp_2/spike-conv-layer-5-out-1-1.png)  |![ts 2](/data/exp_2/spike-conv-layer-5-out-1-2.png)  |![ts 3](/data/exp_2/spike-conv-layer-5-out-1-3.png)  |
+|2nd|![ts 1](/data/exp_2/spike-conv-layer-5-out-2-1.png)  |![ts 2](/data/exp_2/spike-conv-layer-5-out-2-2.png)  |![ts 3](/data/exp_2/spike-conv-layer-5-out-2-3.png)  |
+|   |4                                                    |5                                                    |6                                                    |
+|1st|![ts 4](/data/exp_2/spike-conv-layer-5-out-1-4.png)  |![ts 5](/data/exp_2/spike-conv-layer-5-out-1-5.png)  |![ts 6](/data/exp_2/spike-conv-layer-5-out-1-6.png)  |
+|2nd|![ts 4](/data/exp_2/spike-conv-layer-5-out-2-4.png)  |![ts 5](/data/exp_2/spike-conv-layer-5-out-2-5.png)  |![ts 6](/data/exp_2/spike-conv-layer-5-out-2-6.png)  |
+|   |7                                                    |8                                                    |9                                                    |
+|1st|![ts 7](/data/exp_2/spike-conv-layer-5-out-1-7.png)  |![ts 8](/data/exp_2/spike-conv-layer-5-out-1-8.png)  |![ts 9](/data/exp_2/spike-conv-layer-5-out-1-9.png)  |
+|2nd|![ts 7](/data/exp_2/spike-conv-layer-5-out-2-7.png)  |![ts 8](/data/exp_2/spike-conv-layer-5-out-2-8.png)  |![ts 9](/data/exp_2/spike-conv-layer-5-out-2-9.png)  |
+|   |10                                                   |11                                                   |12                                                   |
+|1st|![ts 10](/data/exp_2/spike-conv-layer-5-out-1-10.png)|![ts 11](/data/exp_2/spike-conv-layer-5-out-1-11.png)|![ts 12](/data/exp_2/spike-conv-layer-5-out-1-12.png)|
+|2nd|![ts 10](/data/exp_2/spike-conv-layer-5-out-2-10.png)|![ts 11](/data/exp_2/spike-conv-layer-5-out-2-11.png)|![ts 12](/data/exp_2/spike-conv-layer-5-out-2-12.png)|
+|   |13                                                   |14                                                   |15                                                   |
+|1st|![ts 13](/data/exp_2/spike-conv-layer-5-out-1-13.png)|![ts 14](/data/exp_2/spike-conv-layer-5-out-1-14.png)|![ts 15](/data/exp_2/spike-conv-layer-5-out-1-15.png)|
+|2nd|![ts 13](/data/exp_2/spike-conv-layer-5-out-2-13.png)|![ts 14](/data/exp_2/spike-conv-layer-5-out-2-14.png)|![ts 15](/data/exp_2/spike-conv-layer-5-out-2-15.png)|
+|   |16                                                   |17                                                   |18                                                   |
+|1st|![ts 16](/data/exp_2/spike-conv-layer-5-out-1-16.png)|![ts 17](/data/exp_2/spike-conv-layer-5-out-1-17.png)|![ts 18](/data/exp_2/spike-conv-layer-5-out-1-18.png)|
+|2nd|![ts 16](/data/exp_2/spike-conv-layer-5-out-2-16.png)|![ts 17](/data/exp_2/spike-conv-layer-5-out-2-17.png)|![ts 18](/data/exp_2/spike-conv-layer-5-out-2-18.png)|
+|   |19                                                   |20                                                   |                                                     |
+|1st|![ts 19](/data/exp_2/spike-conv-layer-5-out-1-19.png)|![ts 20](/data/exp_2/spike-conv-layer-5-out-1-20.png)|                                                     |
+|2nd|![ts 19](/data/exp_2/spike-conv-layer-5-out-2-19.png)|![ts 20](/data/exp_2/spike-conv-layer-5-out-2-20.png)|                                                     |
 
 The output log contains number of rounds, internal clock timing and labels predicted:
 ```
