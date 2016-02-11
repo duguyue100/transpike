@@ -63,6 +63,10 @@ This project is purely built by using Torch 7.
    + For the bigger picture, not all ConvNets are for Object recognition, and not all ConvNets are only having simple convolution and polling method. Dealing with that should be interesting.
    + This technique doesn't really reduce the amount of data and space used. I would be interested to see how this can be a real energy saving plan (notice all data flow is still in float numbers) 
    + Setting this modified network up with a huge dataset like ImageNet should be interesting.
+   
++ On methodology and general concerns
+
+   + Danny's code put ReLU after every convolution layers and polling layer. However the typical way of doing so is somehow glue convolution layer and polling layer as one, and it behaves exactly the same. So in this sense, polling should be as a subroutine to provide output of a layer instead of a particular spiking layer.
 
 ## Contacts
 
