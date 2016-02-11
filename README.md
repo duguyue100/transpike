@@ -51,6 +51,18 @@ This project is purely built by using Torch 7.
 }
    ```
 
++ On visualization of TeraDeep 1000 Categories Net
+
+   Here we visualize the first layer filters (96 9x9 filters) and feature maps from first convolution layer
+   
+   Filters from first layer:
+   
+   ![filters](/data/first-layer-filters.png)
+
+   Feature maps from first convolution layer:
+   
+   ![fms](/data/first-layer-feature-maps-lena.png)
+   
 + On writing `SpikeReLU` class
 
    + I'm basically trying to replicate Dianel's sensor fusion work from [here](https://github.com/dannyneil/sensor_fusion_iscas_2016) right now.
@@ -68,7 +80,7 @@ This project is purely built by using Torch 7.
 
    + Danny's code goes `ConvLayer-->ReLU-->Polling Layer` in this design. However, the typical design is `ConvLayer-->Polling Layer-->ReLU`. They are doing the same job in conventional ConvNets. Following the later one could result simpler implementation (which in this repo), polling layer is just one subroutine of getting output from a convolution layer.
    
-+ Features maps of second ConvLayer after polling. Each feature map has a size of 26x26, and in total 256 feature maps. Following table prints feature maps in 20 time steps:
++ Features maps of second ConvLayer after polling. Each feature map has a size of 26x26, and in total 256 feature maps. The input image is the standard Lena image resized to 224x224. Following table prints feature maps in 20 time steps (the configuration follows Danny's code from [here](https://github.com/dannyneil/sensor_fusion_iscas_2016/blob/master/test_convnet.py#L36-L41):
 
    |                                             |                                             |                                             |
    |:-------------------------------------------:|:-------------------------------------------:|:-------------------------------------------:|
@@ -87,6 +99,7 @@ This project is purely built by using Torch 7.
    |19                                           |20                                           |                                             |
    |![ts 19](/data/spike-conv-layer-5-out-19.png)|![ts 20](/data/spike-conv-layer-5-out-20.png)|                                             |
    
+   The values in these features maps appear to be binary. And as the trail goes, the activations (1s) in feature maps tend to appear less. 
 ## Contacts
 
 Hu Yuhuang  
