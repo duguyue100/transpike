@@ -133,7 +133,22 @@ Features maps of second ConvLayer after polling. Each feature map has a size of 
 |19                                           |20                                           |                                             |
 |![ts 19](/data/spike-conv-layer-5-out-19.png)|![ts 20](/data/spike-conv-layer-5-out-20.png)|                                             |
    
-The values in these features maps appear to be binary. And as the trail goes, the activations (1s) in feature maps tend to appear less. 
+The values in these features maps appear to be binary. And as the trail goes, the activations (1s) in feature maps tend to appear less.
+
+### On first attempt of replicate [Danny's experiment](https://github.com/dannyneil/sensor_fusion_iscas_2016/blob/master/spike_tester_theano.py) on single image 
+
+The Lena image is processed with `spike_snapshot`, and results in this presentation
+
+|                                                           |
+|:---------------------------------------------------------:|
+|![Lena spike snapshot](/data/lena-after-spike-snapshot.png)|
+
+While I ran the experiments, I checked two things:
+
++ Since I don't have a recursive reset as original code, I did a manual reset for `SpikeReLU`, and works.
++ I also don't have a global time clock that can be referred by previous layer, I keep a internal clock at every `SpikeReLU`, and it's synced.
+
+
 
 ## Contacts
 
