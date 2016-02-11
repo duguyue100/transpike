@@ -70,9 +70,20 @@ This project is purely built by using Torch 7.
    
 + Features maps of second ConvLayer after polling. Each feature map has a size of 26x26, and in total 256 feature maps. Following table prints feature maps in 20 time steps:
 
-   |1  |2  |3  |
-   |:-:|:-:|:-:|
-   |![ts 1](/data/spike-conv-layer-5-out-1.png)| | |
+   |1                                            |2                                            |3                                            |
+   |![ts 1](/data/spike-conv-layer-5-out-1.png)  |![ts 2](/data/spike-conv-layer-5-out-2.png)  |![ts 3](/data/spike-conv-layer-5-out-3.png)  |
+   |4                                            |5                                            |6                                            |
+   |![ts 4](/data/spike-conv-layer-5-out-4.png)  |![ts 5](/data/spike-conv-layer-5-out-5.png)  |![ts 6](/data/spike-conv-layer-5-out-6.png)  |
+   |7                                            |8                                            |9                                            |
+   |![ts 7](/data/spike-conv-layer-5-out-7.png)  |![ts 8](/data/spike-conv-layer-5-out-8.png)  |![ts 9](/data/spike-conv-layer-5-out-9.png)  |
+   |10                                           |11                                           |12                                           |
+   |![ts 10](/data/spike-conv-layer-5-out-10.png)|![ts 11](/data/spike-conv-layer-5-out-11.png)|![ts 12](/data/spike-conv-layer-5-out-12.png)|
+   |13                                           |14                                           |15                                           |
+   |![ts 13](/data/spike-conv-layer-5-out-13.png)|![ts 14](/data/spike-conv-layer-5-out-14.png)|![ts 15](/data/spike-conv-layer-5-out-15.png)|
+   |16                                           |17                                           |18                                           |
+   |![ts 16](/data/spike-conv-layer-5-out-16.png)|![ts 17](/data/spike-conv-layer-5-out-17.png)|![ts 18](/data/spike-conv-layer-5-out-18.png)|
+   |19                                           |20                                           |                                             |
+   |![ts 19](/data/spike-conv-layer-5-out-19.png)|![ts 20](/data/spike-conv-layer-5-out-20.png)|                                             |
    
 ## Contacts
 
