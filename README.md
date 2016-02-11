@@ -70,6 +70,7 @@ This project is purely built by using Torch 7.
    
 + Features maps of second ConvLayer after polling. Each feature map has a size of 26x26, and in total 256 feature maps. Following table prints feature maps in 20 time steps:
 
+   |:-------------------------------------------:|:-------------------------------------------:|:-------------------------------------------:|
    |1                                            |2                                            |3                                            |
    |![ts 1](/data/spike-conv-layer-5-out-1.png)  |![ts 2](/data/spike-conv-layer-5-out-2.png)  |![ts 3](/data/spike-conv-layer-5-out-3.png)  |
    |4                                            |5                                            |6                                            |
