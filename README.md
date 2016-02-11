@@ -69,6 +69,7 @@ This project is purely built by using Torch 7.
    + Danny's code goes `ConvLayer-->ReLU-->Polling Layer` in this design. However, the typical design is `ConvLayer-->Polling Layer-->ReLU`. They are doing the same job in conventional ConvNets. Following the later one could result simpler implementation (which in this repo), polling layer is just one subroutine of getting output from a convolution layer.
    
 + Features maps of second ConvLayer after polling. Each feature map has a size of 26x26, and in total 256 feature maps. Following table prints feature maps in 20 time steps:
+
    |1  |2  |3  |
    |:-:|:-:|:-:|
    |![ts 1](/data/spike-conv-layer-5-out-1.png)| | |
