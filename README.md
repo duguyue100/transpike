@@ -12,7 +12,7 @@ This project is purely built by using Torch 7.
 + Write a pre-mature version of Spiking ReLU class [2016-02-10]
 + Setup experiments with single image to get reasonable results [TODO]
 + Setup experiments with multiple images to get reasonable results [TODO]
-+ Find a way of setting up a proper classification experiment [TODO]
++ Find a way of setting up a proper classification experiment (MNIST with LeNet now) [2016-02-12]
 + Figure out a way of hooking this modified network with a camera [TODO]
 + Setup experiments as indicated in Python code [TODO]
 
@@ -97,23 +97,23 @@ nn.Sequential {
 ### On writing `SpikeReLU` class
 
 + I'm basically trying to replicate Dianel's sensor fusion work from [here](https://github.com/dannyneil/sensor_fusion_iscas_2016) right now.
-+ From the original code, Danny implemented spiking layer for dense layer, convolution layer and polling layer. It's constrained by the model and the software he chose.
++ From the original code, Danny implemented spiking layer for dense layer, convolution layer and pooling layer. It's constrained by the model and the software he chose.
 + Instead of re-implementing these layers in Torch entirely, I figured I can write a general spiking ReLU class and replace the original ReLU functions
 + But, there are few problems, the first is on the time sync. In Theano, the time tensor can be traveled through computation graph. However, this is not in the case of Torch, so I defined a internal clock to every `SpikeReLU` object and update them at the same time.
-+ Second is about polling method, previous papers told me using Max-Polling is rather difficult to implement (or messy). But here I haven't met the tricky part yet.
++ Second is about pooling method, previous papers told me using Max-pooling is rather difficult to implement (or messy). But here I haven't met the tricky part yet.
 + The testing part is rather tricky, I would like to give a single image first and see if there is reasonable output. Hook this architecture with camera is rather a later work.  
 + Right now, each `SpikeReLU` object is initialized with manual setup. There should be a way to dress up the network without this kind of intervention.
-+ For the bigger picture, not all ConvNets are for Object recognition, and not all ConvNets are only having simple convolution and polling method. Dealing with that should be interesting.
++ For the bigger picture, not all ConvNets are for Object recognition, and not all ConvNets are only having simple convolution and pooling method. Dealing with that should be interesting.
 + This technique doesn't really reduce the amount of data and space used. I would be interested to see how this can be a real energy saving plan (notice all data flow is still in float numbers) 
 + Setting this modified network up with a huge dataset like ImageNet should be interesting.
 
 ### On methodology and general concerns
 
-+ Danny's code goes `ConvLayer-->ReLU-->Polling Layer` in this design. However, the typical design is `ConvLayer-->Polling Layer-->ReLU`. They are doing the same job in conventional ConvNets. Following the later one could result simpler implementation (which in this repo), polling layer is just one subroutine of getting output from a convolution layer.
++ Danny's code goes `ConvLayer-->ReLU-->pooling Layer` in this design. However, the typical design is `ConvLayer-->pooling Layer-->ReLU`. They are doing the same job in conventional ConvNets. Following the later one could result simpler implementation (which in this repo), pooling layer is just one subroutine of getting output from a convolution layer.
 
 ### On plotting feature maps from Spiking ConvNet
 
-Features maps of second ConvLayer after polling. Each feature map has a size of 26x26, and in total 256 feature maps. The input image is the standard Lena image resized to 224x224. Following table prints feature maps in 20 time steps (the configuration follows Danny's code from [here](https://github.com/dannyneil/sensor_fusion_iscas_2016/blob/master/test_convnet.py#L36-L41):
+Features maps of second ConvLayer after pooling. Each feature map has a size of 26x26, and in total 256 feature maps. The input image is the standard Lena image resized to 224x224. Following table prints feature maps in 20 time steps (the configuration follows Danny's code from [here](https://github.com/dannyneil/sensor_fusion_iscas_2016/blob/master/test_convnet.py#L36-L41):
 
 **These pictures are generated with original Lena image without taking spike snapshot**
 
@@ -149,7 +149,7 @@ While I ran the experiments, I checked two things:
 + Since I don't have a recursive reset as original code, I did a manual reset for `SpikeReLU`, and works.
 + I also don't have a global time clock that can be referred by previous layer, I keep a internal clock at every `SpikeReLU`, and it's synced.
 
-I took 20 rounds on the same image, and for each round, there are 20 steps like previous setup. All parameters are followed. Here I showed feature maps of second ConvLayer after polling from first and second round.
+I took 20 rounds on the same image, and for each round, there are 20 steps like previous setup. All parameters are followed. Here I showed feature maps of second ConvLayer after pooling from first and second round.
 Although the time is flying, feature maps of same time step in different rounds seem having no difference.
 
 |   |                                                     |                                                     |                                                     |
@@ -220,8 +220,55 @@ The result does not seem reasonable enough, especially there is a female inside 
 Furthermore, since the output from last `SpikeReLU` layer is only spikes, so there is no probability distribution as provided by softmax function.
 So I couldn't rank top guesses. So in this case, I printed all possible labels that are indicated by output vector.
 
-And the output labels seems not changing over time, I don't know if it's caused by this still image setting (maybe should introduce some random shifts). 
+And the output labels seems not changing over time, I don't know if it's caused by this still image setting (maybe should introduce some random shifts).
 
+### On MNIST classification with `SpikeReLU` class
+
+I was going to test CIFAR-10 or other datasets instead of MNIST initially. However there is not much pre-trained Caffe model or Torch model available.
+One Caffe model for CIFAR-10 is from the paper _Network in Network_, I loaded and looked up the structure, it's kind of complex for a starter.
+
+Finally I landed with Caffe's example network --- LeNet. And the structure of this network is similar to Danny's proposal
+
+```
+CONV      20 5x5  --> 20 24x24
+MaxPool      2x2  --> 20 12x12
+CONV      50 5x5  --> 50  8x8
+MaxPool      2x2  --> 50  4x4
+Flatten
+Linear       500  --> 1   500
+ReLU
+Linear       10   --> 1   10
+Softmax
+``` 
+
+This network is reporting 98%+ accuracy originally. However, I noticed that there is no activation function after 2 ConvLayer nor pooling layer.
+Firstly, I figured I should add `SpikeReLU` after every pooling layer, and then replace `ReLU` and `Softmax` function as `SpikeReLU`. However, this not really go well.
+
+Then I thought maybe I shouldn't plug `SpikeReLU` after pooling layer, for the matter of fact, it changes how this network is trained initially. The first four may just serve as a feature extractor.
+So I changed the `ReLU` and `Softmax` function only. This won't go anywhere good either.
+
+At this point, I remembered something important I've not done --- normalization on weights.
+This globel model based normalization seems the trick getting higher accuracies. But well, after I applied normalization (the factor is 4000+), all weights are very small.
+Well, in a way, this does not harm your convolution, but it seems making spikes impossible to fire (pure black feature maps are plotted through the time)
+I thought, maybe my bias is hurting me. Because apparently, large bias and small weights are not working together.
+
+Right now, I'm out of my moves. I need to exam again the situation and run some more tests to figure out what's really inside there:
+
++ Run original network without bias
++ Try to normalize bias as weights
++ Checking the code of `SpikeReLU`
++ Checking the code of recognition part
+
+There are some mistakes I found while I'm trying with this network:
+
++ One big mistake is I ignored the fact that variable and memory management is different between Torch and Python. I wrote straight away like Python, but it's kind of a wrong idea.
+  The problem is when Torch does variable assignment like `A=B` on tensors, they automatically connected, so whatever I change something on `B`, `A` would go exactly the same way.
+  
++ The second problem is I should predicted the result for every epochs, instead, I should accumulate the results from each epochs and then do prediction for once
+
++ The third problem is the spike snapshot should be changed for every epochs, instead, I used a static one before.
+  
+  
 ## Contacts
 
 Hu Yuhuang  
