@@ -259,6 +259,9 @@ Right now, I'm out of my moves. I need to exam again the situation and run some 
 + Checking the code of `SpikeReLU`
 + Checking the code of recognition part
 
+One interesting discovery was although the prediction based on maximum spikes is not working well.
+But the right prediction always spikes somewhere in the epochs. If it's a random behavior, then it should be give me lower accuracy, but the correction prediction always spikes.
+
 There are some mistakes I found while I'm trying with this network:
 
 + One big mistake is I ignored the fact that variable and memory management is different between Torch and Python. I wrote straight away like Python, but it's kind of a wrong idea.
