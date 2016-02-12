@@ -53,26 +53,26 @@ function SpikeReLU:updateOutput(input)
   self.output=input;
 
   -- Destroy impulse if in refrac
-  masked_imp=input;
-  masked_imp[self.refrac_until:ge(self.time)]=0.0;
+  masked_imp=input:clone();
+  masked_imp[self.refrac_until:gt(self.time)]=0.0;
   
   -- Add impulse
-  new_mem=torch.add(self.mem, masked_imp);
+  new_mem=self.mem+masked_imp:float();
   
   -- Store spiking
-  output_spikes=new_mem:ge(self.threshold):float();
+  output_spikes=new_mem:clone():gt(self.threshold):float();
   
   -- Reset neuron
-  new_and_reset_mem=new_mem;
+  new_and_reset_mem=new_mem:clone();
   new_and_reset_mem[output_spikes:gt(0)]=0.0;
   
   -- Store refractory
-  new_refractory=self.refrac_until;
+  new_refractory=self.refrac_until:clone();
   new_refractory[output_spikes:gt(0)]=self.time+self.refractory;
 
   -- Updates 
-  self.refrac_until=new_refractory;
-  self.mem=new_and_reset_mem;
+  self.refrac_until=new_refractory:clone();
+  self.mem=new_and_reset_mem:clone();
   
   -- Renew system time
   self.time=self.time+self.timestep;
