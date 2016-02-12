@@ -241,7 +241,7 @@ Linear       10   --> 1   10
 Softmax
 ``` 
 
-This network is reporting 98%+ accuracy originally. However, I noticed that there is no activation function after 2 ConvLayers nor pooling layers.
+This network is reporting 99.14% accuracy originally. However, I noticed that there is no activation function after 2 ConvLayers nor pooling layers.
 Firstly, I figured I should add `SpikeReLU` after every pooling layer, and then replace `ReLU` and `Softmax` function as `SpikeReLU`. However, this did not go well.
 
 Then I thought maybe I shouldn't plug `SpikeReLU` after pooling layer, for the matter of fact, it changes how this network is trained initially. The first four may just serve as a feature extractor.
@@ -258,6 +258,7 @@ Right now, I'm out of my moves. I need to exam again the situation and run some 
 + Try to normalize bias as weights
 + Checking the code of `SpikeReLU`
 + Checking the code of recognition part
++ You can remove bias and change max-pooling to average-pooling to trained ConvNets without a problem?
 
 One interesting discovery was although the prediction based on maximum spikes is not working well,
 the right prediction always spikes somewhere in the epochs. If it's a random behavior, then it should give me lower accuracy, but the correction prediction always spikes.
