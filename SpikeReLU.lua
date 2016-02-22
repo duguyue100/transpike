@@ -51,33 +51,44 @@ end
 --    the input tensor for next layer (also as the output spikes)
 function SpikeReLU:updateOutput(input)
   self.output=input;
-
-  -- Destroy impulse if in refrac
-  masked_imp=input:clone();
-  masked_imp[self.refrac_until:gt(self.time)]=0.0;
   
-  -- Add impulse
-  new_mem=self.mem+masked_imp:float();
+  mem_new=self.mem+input;
+  mem_new[mem_new:le(0.)]=0.0;
   
-  -- Store spiking
-  output_spikes=new_mem:clone():gt(self.threshold):float();
+  output_spikes=mem_new:clone();
+  output_spikes[output_spikes:ge(self.threshold)]:float();
   
-  -- Reset neuron
-  new_and_reset_mem=new_mem:clone();
-  new_and_reset_mem[output_spikes:gt(0)]=0.0;
-  
-  -- Store refractory
-  new_refractory=self.refrac_until:clone();
-  new_refractory[output_spikes:gt(0)]=self.time+self.refractory;
-
-  -- Updates 
-  self.refrac_until=new_refractory:clone();
-  self.mem=new_and_reset_mem:clone();
-  
-  -- Renew system time
-  self.time=self.time+self.timestep;
+  mem_new[mem_new:ge(self.threshold)]=0.0;
+  self.mem=mem_new;
   
   self.output=output_spikes;
+
+--  -- Destroy impulse if in refrac
+--  masked_imp=input:clone();
+--  masked_imp[self.refrac_until:gt(self.time)]=0.0;
+--  
+--  -- Add impulse
+--  new_mem=self.mem+masked_imp:float();
+--  
+--  -- Store spiking
+--  output_spikes=new_mem:clone():gt(self.threshold):float();
+--  
+--  -- Reset neuron
+--  new_and_reset_mem=new_mem:clone();
+--  new_and_reset_mem[output_spikes:gt(0)]=0.0;
+--  
+--  -- Store refractory
+--  new_refractory=self.refrac_until:clone();
+--  new_refractory[output_spikes:gt(0)]=self.time+self.refractory;
+--
+--  -- Updates 
+--  self.refrac_until=new_refractory:clone();
+--  self.mem=new_and_reset_mem:clone();
+--  
+--  -- Renew system time
+--  self.time=self.time+self.timestep;
+--  
+--  self.output=output_spikes;
   
   return self.output;
 end
