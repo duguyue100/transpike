@@ -35,7 +35,7 @@ end
 -- https://github.com/dannyneil/sensor_fusion_iscas_2016/blob/master/spike_tester_theano.py#L13
 function SpikeReLU:reset()
   self.mem:zero():float();
-  self.refrac_until:zero():float();
+--  self.refrac_until:zero():float();
 end
 
 --- Update output spike to next layer

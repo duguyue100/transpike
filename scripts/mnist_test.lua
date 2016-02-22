@@ -85,7 +85,6 @@ for k=1,num_images[1] do
   
   output_spike:zero();
   
-  
   for i=1,20 do
     l=images[k]:view(1,28,28):float();
     spike_snapshot=torch.rand(1,28,28):float();

@@ -74,6 +74,7 @@ network.model:insert(nn.SpikeReLU(torch.LongStorage{4096}), 20);
 -- modify last layer
 network.model:remove(23);
 network.model:insert(nn.SpikeReLU(torch.LongStorage{1000}), 23);
+network.model:float();
 
 --torch.save("../data/model_spike.net", network.model);
 --print ("save completed");
@@ -81,20 +82,16 @@ network.model:insert(nn.SpikeReLU(torch.LongStorage{1000}), 23);
 l=image.lena();
 --l=image.load("../data/apple.jpg");
 --l=image.load("../data/lego_robot_1.jpg");
-l=image.scale(l, 224, 224);
+l=image.scale(l, 224, 224):float();
 
 num_batches=20;
 dt=0.001;
 max_rate=1000.0;
 rescale_fac = 1./(dt * max_rate);
+output_spike=torch.zeros(1000):int();
 
-spike_snapshot=torch.randn(3,224,224)*rescale_fac;
 
-l=spike_snapshot:le(l):float();
-
---image.save("../data/lena-after-spike-snapshot.png", l);
-
-for k=1, num_batches do
+for k=1, 1 do
   
   --- cleaning SpikeReLU
   
@@ -106,19 +103,20 @@ for k=1, num_batches do
   network.model.modules[17]:reset()
   network.model.modules[20]:reset()
   network.model.modules[23]:reset()
-   
-  for i=1,20 do  
-    network.model:forward(l:float());
-    image_title=string.format("../data/exp_2/spike-conv-layer-5-out-%i-%i.png", k, i);
-    print (image_title)
-    fms=network.model.modules[5].output; -- call the layer output you want.
-    image.save(image_title, image.toDisplayTensor{input=fms, padding=1, nrow=16, scaleeach=true});
-  end
   
-  out=network.model.modules[23].output;
-  all_labels=findall(out);
-  print ("-------------------------", k)
-  print ("Internal time clock: ", network.model.modules[2].time, "s")
+  output_spike:zero();
+   
+  for i=1,20 do
+    spike_snapshot=torch.rand(3,224,224):float();
+    temp_l=spike_snapshot:le(l*0.33):float();
+    network.model:forward(temp_l);
+
+    output_spike=output_spike+network.model.modules[23].output:int();
+    
+  end  
+  --_, idx=output_spike:max(1);
+  all_labels=findall(output_spike);
+  print ("-------------------------", k)  
   for i=1, 1000 do
     if all_labels[i]~=0 then
       print (network.label[all_labels[i]+1][1]);
@@ -126,21 +124,6 @@ for k=1, num_batches do
   end
   print ("-------------------------")
 end
-
---out=network.model.modules[23].output;
---
---all_labels=findall(out);
---
---for i=1, 1000 do
---  if all_labels[i]~=0 then
---    print (network.label[all_labels[i]+1][1]);
---  end
---end
-
---print (network.label[2][1])
-
---fms=network.model.modules[5].output; -- call the layer output you want.
---image.display(image.toDisplayTensor{input=fms, padding=1, nrow=16, scaleeach=true});
 
 --[[ Print model ]]
 
