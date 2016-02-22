@@ -16,15 +16,6 @@ require 'image'
 require 'SpikeReLU'
 mnist = require 'mnist'
 
---- Model based Normalization
-
-function sum_module(module)
-  weight=module.weight:clone();
-  weight[weight:le(0)]=0;
-  
-  return torch.sum(weight);
-end
-
 ------ Load Model and Prepare Data ------
 prototxt='../data/lenet.prototxt'
 binary='../data/lenet_iter_10000.caffemodel'
@@ -34,41 +25,45 @@ images = testData.data:float():div(256)
 net:evaluate();
 net:float()
 
------ Normalize Network ------
+------ Tailor ConvNets ------
 
-max_weight_sum=math.max(sum_module(net.modules[1]), sum_module(net.modules[3]), sum_module(net.modules[6]), sum_module(net.modules[8]));
+-- Shutdown bias
+net.modules[1].bias:zero();
+net.modules[3].bias:zero();
+net.modules[6].bias:zero();
+net.modules[8].bias:zero();
 
---net.modules[1].weight=net.modules[1].weight/max_weight_sum;
---net.modules[3].weight=net.modules[3].weight/max_weight_sum;
---net.modules[6].weight=net.modules[6].weight/max_weight_sum;
---net.modules[8].weight=net.modules[8].weight/max_weight_sum;
-
---net.modules[1].bias=net.modules[1].bias:zero();
---net.modules[3].bias=net.modules[3].bias:zero();
---net.modules[6].bias=net.modules[6].bias:zero();
---net.modules[8].bias=net.modules[8].bias:zero();
-
--- print (net.modules[1].weight)
+-- replace to average-pooling
+net:remove(2);
+net:insert(nn.SpatialAveragePooling(2,2,2,2,0,0):ceil(), 2);
+net:remove(4);
+net:insert(nn.SpatialAveragePooling(2,2,2,2,0,0):ceil(), 4);
 
 ------ Modify Networks ------
 --
--- CONV      20 5x5  --> 20 24x24
--- MaxPool      2x2  --> 20 12x12
+-- CONV        20 5x5  --> 20 24x24
+-- AveragePool    2x2  --> 20 12x12
 -- SpikeReLU
--- CONV      50 5x5  --> 50  8x8
--- MaxPool      2x2  --> 50  4x4
+-- CONV        50 5x5  --> 50  8x8
+-- AveragePool    2x2  --> 50  4x4
 -- SpikeReLU
 -- Flatten
--- Linear       500  --> 1   500
+-- Linear         500  --> 1   500
 -- SpikeReLU
--- Linear       10   --> 1   10
+-- Linear         10   --> 1   10
 -- SpikeReLU
 
-net:insert(nn.SpikeReLU(torch.LongStorage{20, 12, 12}), 3);
-net:insert(nn.SpikeReLU(torch.LongStorage{50, 4, 4}), 6);
-net:remove(9);
-net:insert(nn.SpikeReLU(torch.LongStorage{500}), 9);
-net:insert(nn.SpikeReLU(torch.LongStorage{10}), 11);
+--net:insert(nn.SpikeReLU(torch.LongStorage{20, 12, 12}), 3);
+--net:insert(nn.SpikeReLU(torch.LongStorage{50, 4, 4}), 6);
+--net:remove(9);
+--net:insert(nn.SpikeReLU(torch.LongStorage{500}), 9);
+--net:insert(nn.SpikeReLU(torch.LongStorage{10}), 11);
+
+net:remove(7);
+net:insert(nn.SpikeReLU(torch.LongStorage{500}), 7);
+net:insert(nn.SpikeReLU(torch.LongStorage{10}), 9);
+
+net:float();
 
 ------ Set Up Experiment ------
 
@@ -79,55 +74,44 @@ rescale_fac = 1./(dt * max_rate);
 output_spike=torch.zeros(10):int();
 
 score=0.0;
-for k=1,1 do
+
+confusion = optim.ConfusionMatrix(10)
+
+for k=1,num_images[1] do
   
   ------ Reset Network ------
-  net.modules[3]:reset();
-  net.modules[6]:reset(); 
+  net.modules[7]:reset();
   net.modules[9]:reset();
-  net.modules[11]:reset();
   
   output_spike:zero();
   
-  for i=1,1 do
-    l=images[k]:view(1,28,28);
---    spike_snapshot=torch.randn(1,28,28)*rescale_fac;
---    l=spike_snapshot:le(images[k]:view(1,28,28):double()):float();
+  
+  for i=1,20 do
+    l=images[k]:view(1,28,28):float();
+    spike_snapshot=torch.rand(1,28,28):float();
+    l=spike_snapshot:le(l*0.33):float();
     net:forward(l);
-    
-    output_spike=output_spike+net.modules[11].output:int();
+  
+    output_spike=output_spike+net.modules[9].output:int();
   end
   
-  fms=net.modules[6].output;
-  image.display(image.toDisplayTensor{input=fms, padding=1, nrow=5, scaleeach=true});
-    
-    
+--  fms=net.modules[6].output;
+--  image.display(image.toDisplayTensor{input=fms, padding=1, nrow=5, scaleeach=true});
+
   _, idx=output_spike:max(1);
   print ("---------------------------------------", k)
   print ("Prediction: ", idx[1]-1)
   print ("Actual    : ", testData.label[k])
   print ("---------------------------------------")
   
---  if (output_spike[testData.label[k]+1]) then
---    score=score+1;
---  end
-  
+  confusion:add(idx[1], testData.label[k]+1)
+    
   if (idx[1]-1)==testData.label[k] then
     score=score+1
   end;
-  
 end
 
-print (score/200.)
---image.display(image.toDisplayTensor{input=fms, padding=1, nrow=5, scaleeach=true});
+print(confusion)
 
--- will be used to print the results
---confusion = optim.ConfusionMatrix(10)
---
---for i=1,images:size(1) do
---  _,y = net:forward(images[i]:view(1,28,28)):max(1)
---  confusion:add(y[1], testData.label[i]+1)
---end
---
----- that's all! will print the error and confusion matrix
---print(confusion)
+print (score);
+print (score/num_images[1])

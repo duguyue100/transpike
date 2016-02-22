@@ -14,7 +14,7 @@ This project is purely built by using Torch 7.
 + Setup experiments with multiple images to get reasonable results [TODO]
 + Find a way of setting up a proper classification experiment (MNIST with LeNet now) [2016-02-12]
 + Figure out a way of hooking this modified network with a camera [TODO]
-+ Setup experiments as indicated in Python code [TODO]
++ Setup experiments as indicated in Python code [2016-02-22]
 
 ## Notes
 
@@ -314,6 +314,35 @@ The LeNet I'm using reports 99.14% originally. Then after I shutdown bias, the p
 I then replaced max-pooling to average-pooling, the performance now is 69.8%.
 Of course, this dramatic performance drop is expected. And I use this as a baseline to test
 my `SpikeReLU` correctness.
+
+### On MNIST Classification using tailored LeNet (Second Attempt)
+
+In this experiment, instead of using Danny's code, I appiled algorithms from the paper 
+"Spiking Deep Convolutional Neural Networks for Energy-Efficient Object Recognition".
+The implementation is simpler than Danny's. In particular, it does not use any time factor.
+
+After I tailored the network as suggested by the paper, I then setup one experiment. And the result is quite surprising: 63.8%
+This accuracy is similar to the original network. Furthermore, all spiking threshold is set as 1, and there is no further tuning included.
+
+Here is the confusion matrix generated:
+
+```
+ConfusionMatrix:
+[[     956       0       0       2       0       7       0       9       6       0]   97.551% 
+ [       0     557       0     265       0       0       0       0     312       1]   49.075% 
+ [      24      34     463      76      40       8      34      74     279       0]   44.864% 
+ [       9       9       1     805      12       7       0      12     132      23]   79.703% 
+ [       3       6       5       4     889       0       5      41      16      13]   90.530% 
+ [      39      17       0      58      55     373       2      21     308      19]   41.816% 
+ [      55      25      11      21      90     140     500      34      82       0]   52.192% 
+ [       4       6       2      38      66       0       0     855      43      14]   83.171% 
+ [       6       2       0      59      13       4       1      11     878       0]   90.144% 
+ [       9       6       0      18     611       3       1     179      78     104]]  10.307% 
+ + average row correct: 63.935313522816% 
+ + average rowUcol correct (VOC measure): 46.791453659534% 
+ + global correct: 63.8%
+```
+
  
 ## Contacts
 
