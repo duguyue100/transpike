@@ -15,6 +15,7 @@ This project is purely built by using Torch 7.
 + Find a way of setting up a proper classification experiment (MNIST with LeNet now) [2016-02-12]
 + Figure out a way of hooking this modified network with a camera [TODO]
 + Setup experiments as indicated in Python code [2016-02-22]
++ Writing a Max-Pooling for Spiking ConvNets [TODO]
 
 ## Notes
 
@@ -275,7 +276,7 @@ There are some mistakes I found while I'm trying with this network:
 ---
 ---
 
-**Start Over and Check***
+**Start Over and Check**
  
 ### On Spike Generation
 
@@ -343,6 +344,28 @@ ConfusionMatrix:
  + global correct: 63.8%
 ```
 
+This is similar to confusion matrix in ConvNet
+
+```
+ConfusionMatrix:
+[[     965       1       0       3       1       5       0       3       2       0]   98.469% 
+ [       0     788       0     262       0       0       0       0      85       0]   69.427% 
+ [      21      25     550     157      46       5      36      59     133       0]   53.295% 
+ [       4      11       0     871       6       2       0       7     104       5]   86.238% 
+ [       2       8       3       1     926       0       7      19      12       4]   94.297% 
+ [      45      46       0      98      45     377       6      10     251      14]   42.265% 
+ [      50      38       4      39      44      97     632      13      41       0]   65.971% 
+ [       5       9       1      12      46       0       1     931      17       6]   90.564% 
+ [       3      20       0      72      10       1       1       7     860       0]   88.296% 
+ [      11      14       1      21     642       3       0     142      95      80]]  7.929% 
+ + average row correct: 69.675012454391% 
+ + average rowUcol correct (VOC measure): 53.234515339136% 
+ + global correct: 69.8%
+```
+
+### On Writing Max-Pooling in Spiking NN
+
+TBD
  
 ## Contacts
 
