@@ -298,6 +298,22 @@ rand(0,1)<0.33*Image
 |Lena Example for color image                       |
 |![lena example](/data/spike-gen-lena-color.gif)    |
 
+### Tailor LeNet
+
+Current papers on Spiking ConvNets are using average pooling in order to simplify the process.
+So before I figured out how to perform max-pooling, I just simply turned max-pooling in LeNet to average-pooling.
+
+According to the paper "Spiking Deep Convolutional Neural Networks for Energy-Efficient Object Recognition", the major difficulty is:
+
+> Max-pooling requires two layers of spiking networks. In CNN, spatial max-pooling is implemented as taking the 
+> maximum output values over a small image neighborhood in the imput. In SNN, we need two-layer neural networks to
+> accomplish this, with lateral inhibition followed by pooling over these small image regions. This approach
+> requires more neurons and can cause accuracy loss due to the added complexity.
+
+The LeNet I'm using reports 99.14% originally. Then after I shutdown bias, the performance drops to 98.68%.
+I then replaced max-pooling to average-pooling, the performance now is 69.8%.
+Of course, this dramatic performance drop is expected. And I use this as a baseline to test
+my `SpikeReLU` correctness.
  
 ## Contacts
 

@@ -32,13 +32,7 @@ testData = mnist.testdataset()
 
 -- preprocess by dividing by 256
 images = testData.data:float():div(256)
-
-if arg[1] == 'cuda' then
-  net:cuda()
-  images = images:cuda()
-else
-  net:float()
-end
+net:float();
 
 -- will be used to print the results
 confusion = optim.ConfusionMatrix(10)
