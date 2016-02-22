@@ -270,9 +270,35 @@ There are some mistakes I found while I'm trying with this network:
   
 + The second problem is I should predicted the result for every epochs, instead, I should accumulate the results from each epochs and then do prediction for once
 
-+ The third problem is the spike snapshot should be changed for every epochs, instead, I used a static one before.
-  
-  
++ The third problem is the spike snapshot should be changed for every epochs, instead, I used a static one before.  
+
+---
+---
+
+**Start Over and Check***
+ 
+### On Spike Generation
+
+The images are preprocessed by taking _spike snapshots_ before fed into Spiking NNs.
+This imitates behavior of event vision sensor (but far from real). Two examples are presented here:
+
+1. The first one is taken from test dataset of MNIST
+2. The second one is a rescaled version of Lena image
+
+Both images are generated based on following rule:
+
+```
+rand(0,1)<0.33*Image
+```
+
+|                                                   |
+|:-------------------------------------------------:|
+|MNIST Example for digit 7                          |
+|![mnist example](/data/spike-gen-mnist-exp-7.gif)  |
+|Lena Example for color image                       |
+|![lena example](/data/spike-gen-lena-color.gif)    |
+
+ 
 ## Contacts
 
 Hu Yuhuang  
