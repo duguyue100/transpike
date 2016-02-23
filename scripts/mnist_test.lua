@@ -33,6 +33,9 @@ net.modules[3].bias:zero();
 net.modules[6].bias:zero();
 net.modules[8].bias:zero();
 
+--net:insert(nn.SpikeReLU(torch.LongStorage{20, 12, 12}), 3);
+--net:insert(nn.SpikeReLU(torch.LongStorage{50, 4, 4}), 6);
+
 -- replace to average-pooling
 net:remove(2);
 net:insert(nn.SpatialAveragePooling(2,2,2,2,0,0):ceil(), 2);
@@ -55,10 +58,6 @@ net:insert(nn.SpatialAveragePooling(2,2,2,2,0,0):ceil(), 4);
 
 --net:insert(nn.SpikeReLU(torch.LongStorage{20, 12, 12}), 3);
 --net:insert(nn.SpikeReLU(torch.LongStorage{50, 4, 4}), 6);
---net:remove(9);
---net:insert(nn.SpikeReLU(torch.LongStorage{500}), 9);
---net:insert(nn.SpikeReLU(torch.LongStorage{10}), 11);
-
 net:remove(7);
 net:insert(nn.SpikeReLU(torch.LongStorage{500}), 7);
 net:insert(nn.SpikeReLU(torch.LongStorage{10}), 9);

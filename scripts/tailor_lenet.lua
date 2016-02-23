@@ -20,10 +20,19 @@ net.modules[8].bias:zero();
 
 -- After removing all bias, accuracy is 98.68%
 
+net:insert(nn.ReLU(), 3);
+net:insert(nn.ReLU(), 6);
+--net:insert(nn.SpatialCrossMapLRN(1), 2);
+--net:remove(3);
+--net:insert(nn.SpatialAveragePooling(2,2,2,2,0,0):ceil(), 3);
+--net:insert(nn.SpatialCrossMapLRN(1), 5);
+--net:remove(6);
+--net:insert(nn.SpatialAveragePooling(2,2,2,2,0,0):ceil(), 6);
+
 net:remove(2);
 net:insert(nn.SpatialAveragePooling(2,2,2,2,0,0):ceil(), 2);
-net:remove(4);
-net:insert(nn.SpatialAveragePooling(2,2,2,2,0,0):ceil(), 4);
+net:remove(5);
+net:insert(nn.SpatialAveragePooling(2,2,2,2,0,0):ceil(), 5);
 
 -- After changing pooling method directly, accuracy is 69.8%
 
