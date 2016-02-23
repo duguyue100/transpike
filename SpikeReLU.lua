@@ -59,7 +59,7 @@ function SpikeReLU:updateOutput(input)
   output_spikes[output_spikes:ge(self.threshold)]:float();
   
   mem_new[mem_new:ge(self.threshold)]=0.0;
-  self.mem=mem_new;
+  self.mem=mem_new:clone();
   
   self.output=output_spikes;
 
