@@ -307,7 +307,7 @@ So before I figured out how to perform max-pooling, I just simply turned max-poo
 According to the paper "Spiking Deep Convolutional Neural Networks for Energy-Efficient Object Recognition", the major difficulty is:
 
 > Max-pooling requires two layers of spiking networks. In CNN, spatial max-pooling is implemented as taking the 
-> maximum output values over a small image neighborhood in the imput. In SNN, we need two-layer neural networks to
+> maximum output values over a small image neighborhood in the input. In SNN, we need two-layer neural networks to
 > accomplish this, with lateral inhibition followed by pooling over these small image regions. This approach
 > requires more neurons and can cause accuracy loss due to the added complexity.
 
@@ -361,6 +361,27 @@ ConfusionMatrix:
  + average row correct: 69.675012454391% 
  + average rowUcol correct (VOC measure): 53.234515339136% 
  + global correct: 69.8%
+```
+
+After removing the spike snapshot, we reached to 67.23% in accuracy.
+This may indicates that sampling precision can affect classification in Spiking NNs.
+The confusion matrix is as follows: 
+
+```
+ConfusionMatrix:
+[[     965       0       1       2       1       6       0       2       3       0]   98.469% 
+ [       0     636       0     354       0       0       0       0     145       0]   56.035% 
+ [      24      31     532     135      41       4      37      67     161       0]   51.550% 
+ [       8      13       0     846       7       1       0       9     115      11]   83.762% 
+ [       2       9       3       2     916       0       6      25      11       8]   93.279% 
+ [      46      30       0      85      47     374       4      13     275      18]   41.928% 
+ [      53      31       3      36      56     112     600      15      52       0]   62.630% 
+ [       5       9       1      25      53       0       1     900      26       8]   87.549% 
+ [       3      14       0      68      12       1       1       6     869       0]   89.220% 
+ [       9      13       1      21     660       4       0     120      96      85]]  8.424% 
+ + average row correct: 67.284768670797% 
+ + average rowUcol correct (VOC measure): 50.507127791643% 
+ + global correct: 67.23%
 ```
 
 ### On Writing Max-Pooling in Spiking NN
