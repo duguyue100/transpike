@@ -5,6 +5,7 @@ mnist = require 'mnist'
 
 -- to train lenet network please follow the steps
 -- provided in CAFFE_DIR/examples/mnist
+-- This is a testing commit for atom
 prototxt = '../data/lenet.prototxt'
 binary = '../data/lenet_iter_10000.caffemodel'
 
